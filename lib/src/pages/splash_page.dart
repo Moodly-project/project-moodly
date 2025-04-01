@@ -12,7 +12,7 @@ class _SplashScreenState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 1), () {
+    Timer(Duration(seconds: 5), () {
       Navigator.pushReplacementNamed(context, '/');
     });
   }

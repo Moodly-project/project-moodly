@@ -1,4 +1,4 @@
-import 'package:appfluxolivre/src/app_fluxolivre.dart';
+import 'package:appfluxolivre/src/projectmoodly.dart';
 import 'package:flutter/material.dart';
 
 void main() {

@@ -1,85 +1,134 @@
-import 'package:appfluxolivre/src/widget/input_create_user_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:validatorless/validatorless.dart';
+import 'package:appfluxolivre/src/widget/input_create_user_widget.dart';
 
 class CreateUserPage extends StatelessWidget {
-  const CreateUserPage({super.key});
+  CreateUserPage({super.key});
+
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController nameControllerCreateUser =
+      TextEditingController();
+  final TextEditingController emailControllerCreateUser =
+      TextEditingController();
+  final TextEditingController passwordControllerCreateUser =
+      TextEditingController();
+  final TextEditingController confirmPasswordControllerCreateUser =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/login.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                width: 200,
-                height: 200,
-                child: Image(
-                    image: AssetImage(
-                  'assets/images/et.png',
-                )),
-              ),
-              const SizedBox(height: 30),
-              Text(
-                'Cadastrar Conta',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFFFFFFFF),
-                ),
-              ),
-              InputCreateUserWidget(
-                  hint: 'Nome', icon: Icons.person_outline, obscure: false),
-              InputCreateUserWidget(
-                  hint: 'E-mail', icon: Icons.email_outlined, obscure: false),
-              InputCreateUserWidget(
-                  hint: 'CPF', icon: Icons.card_membership_outlined, obscure: false),
-              InputCreateUserWidget(
-                  hint: 'Senha', icon: Icons.password_outlined, obscure: true),
-              InputCreateUserWidget(
-                  hint: 'Confirmar Senha',
-                  icon: Icons.password_outlined,
-                  obscure: true),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0Xffafae24),
-                    minimumSize: Size(double.infinity, 60),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+      backgroundColor: const Color(0xFF2C7A74),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+            decoration: BoxDecoration(
+              color: const Color(0xFF78A29A),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/logotipo.png',
+                    fit: BoxFit.contain,
+                    width: 270,
+                    height: 200,
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Preencha os Dados',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/home');
-                  },
-                  child: const Text(
-                    'Cadastrar',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF031C5F),
+                  const SizedBox(height: 15),
+                  InputCreateUserWidget(
+                    hint: 'Digite seu nome',
+                    icon: Icons.person_outline,
+                    obscure: false,
+                    controller: nameControllerCreateUser,
+                    // validator: Validatorless.required('Nome é obrigatório'),
+                  ),
+                  InputCreateUserWidget(
+                    hint: 'Digite seu e-mail',
+                    icon: Icons.email_outlined,
+                    obscure: false,
+                    controller: emailControllerCreateUser,
+                    validator: Validatorless.multiple([
+                      // Validatorless.required('E-mail é obrigatório'),
+                      // Validatorless.email('E-mail inválido'),
+                    ]),
+                  ),
+                  InputCreateUserWidget(
+                    hint: 'Digite sua senha',
+                    icon: Icons.lock_outline,
+                    obscure: true,
+                    controller: passwordControllerCreateUser,
+                    validator: Validatorless.multiple([
+                      // Validatorless.required('Senha é obrigatória'),
+                      // Validatorless.min(
+                      //     6, 'A senha deve ter pelo menos 6 caracteres'),
+                    ]),
+                  ),
+                  InputCreateUserWidget(
+                    hint: 'Confirme sua senha',
+                    icon: Icons.lock_outline,
+                    obscure: true,
+                    controller: confirmPasswordControllerCreateUser,
+                    validator: Validatorless.multiple([
+                      // Validatorless.required(
+                      //     'Confirmação de senha é obrigatória'),
+                      // Validatorless.compare(
+                      //     passwordController, 'As senhas não coincidem'),
+                    ]),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFA8CFB4),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      minimumSize: const Size(120, 45),
                     ),
-                  )),
-              const SizedBox(height: 30),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pushNamed('/');
-                },
-                child: const Text(
-                  'Cancelar',
-                  style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 20),
-                ),
+                    onPressed: () {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        Navigator.of(context).pushNamed('/home');
+                      }
+                    },
+                    child: const Text(
+                      'Cadastrar',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pop(); // Volta para a tela anterior (Login)
+                    },
+                    child: const Text(
+                      'Cancelar',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
